@@ -17,6 +17,7 @@ const App = () => {
       setUser((prevUser) =>(prevUser === 1 ? 0 : 1));
     }
   };
+
   useEffect(()=>{
     array[0] !== 0 && array[0] === array[1] && array[0] === array[2] ? (setWin([0,1,2])) :
     array[3] !== 0 && array[3] === array[4] && array[3] === array[5] ? (setWin([3,4,5])) :
@@ -30,12 +31,12 @@ const App = () => {
 
   const renderItem = ({item}) =>{
     return (
-      <View >
-        <Pressable onPress={()=>handlePress(item.number)} style={styles.pressableView} >
+      <View>
+        <Pressable onPress={()=>handlePress(item.number)} style={win.includes(item.number) ? styles.winBg : styles.pressableView} >
           {
             array[item.number] === 1 ? (<Text style={styles.pressableText}>X</Text>) :
             array[item.number] === 2 ? (<Text style={styles.pressableText}>Y</Text>) :
-            (<Text style={styles.pressableText}>{item.number}</Text>)
+            (<Text style={styles.pressableText}></Text>)
           }
         </Pressable>
       </View>
@@ -45,15 +46,19 @@ const App = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>Tic Tac Toe</Text>
+        <Text style={styles.headingText}>Tic Tac Toe</Text>
+        <View style={styles.playertextContainer}>
+          <Text style={styles.playerText}>{user? (<Text>Player-Y</Text>) : (<Text>Player-X</Text>)}</Text>
+        </View>
         <View>
           <FlatList
           numColumns={3}
           data={DATA}
           renderItem={renderItem}
+          contentContainerStyle={styles.pressableViewContainer}
           />
         </View>
-        <TouchableOpacity onPress={()=>{setArray([0,0,0,0,0,0,0,0,0]); setWin([-1, -1, -1])}}
+        <TouchableOpacity onPress={()=>{setArray([0,0,0,0,0,0,0,0,0]); setWin([-1, -1, -1]); setUser(0);}}
          style={styles.btn}><Text style={styles.btnText}>Reset</Text></TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,15 +68,44 @@ const App = () => {
 export default App;
 
 const styles = StyleSheet.create({
+  headingText:{
+    fontSize:45,
+    fontWeight:'500',
+    textAlign: 'center',
+    marginBottom:10,
+  },
+  playertextContainer:{
+    backgroundColor:'#565D60',
+    borderRadius:15,
+    marginHorizontal:72,
+    marginVertical:15,
+    opacity:1000,
+  },
+  playerText:{
+    fontSize:30,
+    fontWeight:'500',
+    textAlign: 'center',
+    marginBottom:10,
+  },
+  pressableViewContainer:{
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   pressableView:{
-    width:50,
-    height:50,
+    width:75,
+    height:75,
     backgroundColor: '#fff',
-    margin: 1,
+    borderRadius:2,
+    margin: 3,
     padding:2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   pressableText: {
     color: '#000000',
+    fontSize:35,
+    fontWeight:'700',
+
   },
   btn:{
     backgroundColor:'#11D81F',
@@ -85,5 +119,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight:'800',
     color:'#fff',
-  }
+  },
+  winBg: {
+    width:75,
+    height:75,
+    backgroundColor: '#67B26A',
+    borderRadius:2,
+    margin: 3,
+    padding:2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
